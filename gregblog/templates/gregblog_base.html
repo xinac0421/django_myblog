@@ -1,0 +1,60 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{# 标题后面加上自定义名字 #}
+{% block title %}{% endblock %} - 王不迟的博客
+
+
+
+{# 加载自定义样式 #}
+{% block style %}
+    <link href="{% static "gregblog/blog.css" %}" rel="stylesheet">
+    <link href="{% static "base.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{# 内容块 #}
+{% block content %}
+{% endblock %}
+
+{# 分页功能 #}
+{% block pagination %}
+    <div aria-label="Page navigation" class="pagination-div">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <span>
+                        <span aria-hidden="true">&laquo;</span>
+                    </span>
+                </li>
+            {% endif %}
+
+            {% for number in my_page_list %}
+                {% if page_obj.number == number %}
+                    <li class="active"><a href="?page={{ number }}">{{ number }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ number }}">{{ number }}</a></li>
+                {% endif %}
+
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+            {% else %}
+                <li class="disabled"><span><span aria-hidden="true">&raquo;</span></span></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+
+{# 右边分类/标签等面板栏，可覆盖 #}
+{% block panels %}
+{% endblock %}
+
+
+
+

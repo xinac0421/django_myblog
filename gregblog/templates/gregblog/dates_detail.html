@@ -1,0 +1,8 @@
+{% extends 'gregblog/index.html' %}
+
+{% block title %}日期归档{% endblock %}
+
+{% block panel_title %}
+    {# 这里是面板标题，每个页面可重写 #}
+    {{ year_and_month.year }}年{{ year_and_month.month }}月: 共有{{ paginator.count }}篇文章
+{% endblock %}

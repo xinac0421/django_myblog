@@ -1,0 +1,8 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{# 标题后面加上自定义名字 #}
+{% block title %}错误信息{% endblock %} - 王不迟的博客
+
+{% block content %}
+    <div>{{ error_message }}</div>
+{% endblock %}

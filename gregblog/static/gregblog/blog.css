@@ -1,0 +1,62 @@
+/*自定义样式设置*/
+ul {
+    list-style-type: none;
+}
+
+ul.tag-type {
+    padding: 0;
+}
+
+div.atricle:not(:last-child) {
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #eee;
+}
+
+div.atricle h3 {
+    margin-top: 0.5em;
+}
+
+ul.article-detail-title-ul {
+    list-style-type: none;
+}
+
+ul.article-detail-title-ul li {
+    display: inline;
+}
+
+div.pagination-div {
+    text-align: center;
+}
+
+ul.pager {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+div.comment-area {
+    margin-top: 2em;
+}
+
+h3.comment-area-title {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.4em;
+}
+
+div.django-ckeditor-widget {
+    width: 100%;
+}
+
+div#reply_content_container {
+    border: 1px solid #d1d1d1;
+    border-bottom: none;
+    background-color: #f8f8f8;
+    overflow: hidden;
+    padding: 1em 1em 0.5em;
+}
+
+p#reply_title {
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 0.5em;
+}
+

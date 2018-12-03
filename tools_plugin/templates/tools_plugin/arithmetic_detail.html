@@ -1,0 +1,30 @@
+{% extends 'tools_base.html' %}
+{% load static %}
+
+
+{% block container %}
+
+    <table class="table print-adapt-A4" align="center">
+        <thead>
+        <tr style="align-content: center">
+            <th>班级：______ </th>
+            <th>姓名：______ </th>
+            <th>时间：______ </th>
+            <th>分数：______ </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for math_format_list in all_math_format_list %}
+                <tr>
+                    {% for math in math_format_list %}
+                        <td>{{ math }}</td>
+                    {% endfor %}
+                </tr>
+        {% endfor %}
+
+    </tbody>
+
+    </table>
+{% endblock %}
+
+

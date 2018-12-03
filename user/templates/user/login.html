@@ -1,0 +1,44 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %}登录{% endblock %}
+
+
+
+{% block container %}
+        <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><h4>登录</h4></div>
+                  <div class="panel-body">
+                    <form class="form-group" method="POST">
+                        {% csrf_token %}
+                        {% for form in login_form %}
+                            <label for="{{ form.id_for_label }}">{{ form.label }}</label>
+                            {{ form }}
+                            <p class="text-danger">{{ form.errors.as_text }}</p>
+                        {% endfor %}
+                        <span class="text-danger">{{ login_form.non_field_errors }}</span>
+                        <a href="{% url 'user:forgot_password' %}" class="pull-left" style="margin-bottom: 0.5em">忘记密码？</a>
+                        <button type="submit" class="btn btn-primary btn-block">登录</button>
+
+                        <div style="margin-top: 20px">
+                            <span>还没有注册账号?</span>
+                            <span><a href="{% url 'user:register' %}">立即注册</a></span>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

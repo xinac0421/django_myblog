@@ -1,0 +1,10 @@
+{% extends "gregblog/index.html" %}
+
+{% block title %}
+    {{ this_tag.name }}
+{% endblock %}
+{% block panel_title %}
+    {# 这里是面板标题，每个页面可重写 #}
+    {{ this_tag.name }}：共有{{ paginator.count }}篇文章
+{% endblock %}
+

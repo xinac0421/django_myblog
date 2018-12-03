@@ -1,0 +1,10 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% block title %}数学习题{% endblock %}
+
+{# 加载自定义样式 #}
+{% block style %}
+    <link href="{% static "base.css" %}" rel="stylesheet">
+    <link href="{% static "tools_plugin/math.css" %}" rel="stylesheet">
+{% endblock %}
+

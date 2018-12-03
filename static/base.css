@@ -1,0 +1,9 @@
+body {
+    padding-top: 70px;
+    list-style-type: none;
+}
+
+ul.navbar-right {
+    margin-right: 0;
+}
+

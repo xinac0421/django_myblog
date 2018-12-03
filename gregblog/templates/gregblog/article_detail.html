@@ -1,0 +1,227 @@
+{% extends "gregblog/index.html" %}
+{% load static %}
+{% load comment_tags %}
+{% load count_tags %}
+{% block title %}
+    {{ article_detail.title }}
+{% endblock %}
+
+{% block head_static_expand %}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+             <h3>{{ article_detail.title }}</h3>
+             <ul class="article-detail-title-ul">
+                 <li>{{ article_detail.create_time|date:"Y-m-d H:i:s" }}</li>&nbsp;&nbsp;
+                 <li>阅读数：{% get_read_count article_detail %}</li>&nbsp;&nbsp;
+                 <li>评论数：{% get_comment_count article_detail %}</li>
+                 <p>
+                     标签:
+                    {% for tag in article_detail.tags.all %}
+                        {% if forloop.last %}
+                        {# 如果是最后个，则不用加逗号 #}
+                            <a href="{% url 'gregblog:tag_detail' tag.pk %}">{{ tag.name }}</a>
+                        {% else %}
+                            <a href="{% url 'gregblog:tag_detail' tag.pk %}">{{ tag.name }}</a> ,
+                    {% endif %}
+                    {% endfor %}
+                </p>
+             </ul>
+        </div>
+        <div class="panel-body">
+            <p>{{ article_detail.content|safe }}</p>
+
+        </div>
+    </div>
+
+    {# 上一篇 下一篇链接 #}
+    <div aria-label="...">
+        <ul class="pager">
+            {% if has_prev %}
+                <li class="previous"><a href="{% url 'gregblog:article_detail' article_prev.id %}" title="{{ article_next.title }}"><span aria-hidden="true">&larr;</span> 上一篇</a></li>
+            {% else %}
+                <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> 上一篇</a></li>
+            {% endif %}
+
+            {% if has_next %}
+                <li class="next"><a href="{% url 'gregblog:article_detail' article_next.id %}" title="{{ article_next.title }}">下一篇 <span aria-hidden="true">&rarr;</span></a></li>
+            {% else %}
+                <li class="next disabled"><a href="#">下一篇 <span aria-hidden="true">&rarr;</span></a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+{# 覆盖block，不显示分页 #}
+{% block pagination %}{% endblock %}
+
+{# 评论区域 #}
+{% block commemt %}
+    <div class="comment-area">
+        <h3 class="comment-area-title" id="comment_form_title">提交评论</h3>
+
+        {% if user.is_authenticated %}
+            <form id="comment_form" action="{% url 'comment:comment' %}" method="POST" style="overflow:hidden">
+            {% csrf_token %}
+                <label>{{ user.get_nickname_or_username }}, 欢迎评论~</label>
+                <div id="reply_content_container" style="display: none;">
+                    <p id="reply_title">回复:</p>
+                    <div id="reply_content"></div>
+                </div>
+                {% get_comment_form article_detail %}
+                <button type="submit" class="btn btn-primary" style="float:right">评论</button>
+            </form>
+        {% else %}
+            <div><a class="btn btn-primary" href="{% url 'user:login' %}?from={{ request.get_full_path_info }}">登录</a> 后发表评论!</div>
+        {% endif %}
+    </div>
+
+    <div class="comment-area">
+        <h3 class="comment-area-title">评论列表</h3>
+        <div id="comment_list">
+             {% get_comment_list article_detail as comment_list %}
+             {% for comment in comment_list %}
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      <img style="height: 24px; width: 24px;" class="media-object" src="/static/head_default.jpg">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                      <h4 class="media-heading">{{ comment.user.get_nickname_or_username }}</h4>
+                      <div id="comment_{{ comment.pk }}">
+                          {{ comment.text|safe }}
+                      </div>
+                      <div style="color: darkgray">({{ comment.comment_time|date:"Y-m-d H:i:s" }})</div>
+                      {% if user.is_authenticated %}
+                        <a href="javascript:reply({{ comment.pk }})">回复</a>
+                      {% endif %}
+                      {# 回复列表 #}
+                      {% for reply in comment.root_comment.all %}
+                      <div id="root_{{ comment.pk }}" class="media">
+                          <div class="media-left">
+                              <a href="#">
+                                <img style="height: 24px; width: 24px;" class="media-object" src="/static/head_default.jpg">
+                              </a>
+                          </div>
+                          <div class="media-body">
+                              <div class="media-heading">{{ reply.user.get_nickname_or_username }}: @{{ reply.reply_to.get_nickname_or_username }}</div>
+                              <div id="comment_{{ reply.pk }}">
+                                    {{ reply.text|safe }}
+                              </div>
+                              <div style="color: darkgray">({{ reply.comment_time|date:"Y-m-d H:i:s" }})</div>
+                              {% if user.is_authenticated %}
+                                <a href="javascript:reply({{ reply.pk }})">回复</a>
+                              {% endif %}
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+
+                </div>
+            {% empty %}
+                 <span id="no_comment">还没有任何评论，赶紧去抢占吧！</span>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block modal_dialog %}
+    <!-- Modal -->
+        <div class="modal fade" id="modal_message" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel" style="text-align: center">信息</h4>
+              </div>
+              <div class="modal-body">
+                <p id="modal_message_content">这是提示信息内容</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}
+
+
+{% block body_script_extend %}
+    <script type="text/javascript">
+        $("#comment_form").submit(function () {
+            // 判断是否为空
+            var input_text = CKEDITOR.instances["id_text"].document.getBody().getText().trim();
+            if(input_text.length === 0){
+                $('#modal_message_content').text('评论内容不能为空');
+                $('#modal_message').modal('show');
+            }else{
+                // 先更新数据到textarea
+                CKEDITOR.instances['id_text'].updateElement();
+                // 异步提交
+                $.ajax({
+                url: {% url 'comment:comment' %},
+                type: 'POST',
+                data: $(this).serialize(),
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    if(data["status"]==="SUCCESS"){
+                        console.log($('#reply_comment_id').val());
+                        if($('#reply_comment_id').val()==='0'){
+                            // 插入评论
+                            var comment_html = '<div id="root_' + data['pk'] +'" class="media">\n' +
+                                '<div class="media-left">\n' + '<a href="#">\n' +
+                                '<img style="height: 24px; width: 24px; class="media-object" src="/static/head_default.jpg">\n' +
+                                '</a>\n' + '</div>\n' + '<div class="media-body">\n' +
+                                '<h4 class="media-heading">'+ data['username'] +'</h4>\n' +
+                                '<div id="comment_'+ data['pk'] +'">\n' + data['text'] +'\n' + '</div>' +
+                                '<div style="color: darkgray">('+data['comment_time']+')' +
+                                '</div>\n' +'<a href="javascript:reply('+ data['pk'] +')">回复</a>' +'</div>' +  '</div>';
+                            $("#comment_list").prepend(comment_html);
+                        }else{
+                            //插入回复 PS:这里还有点问题，不能显示出来，待检查
+                            var reply_html = '<div class="media">\n' + '<div class="media-left">\n' + '<a href="#">\n' +
+                                '<img style="height: 24px; width: 24px; class="media-object" src="/static/head_default.jpg">\n' + '</a>\n' + '</div>\n' +
+                                '<div class="media-body">\n' + '<div class="media-heading">'+ data['username'] +
+                                ': @ ' + data['reply_to'] + '</div>\n' + '<div id="comment_' + data['pk'] +'">\n' +
+                                data['text'] + '</div>\n' + '<div style="color: darkgray">('+ data['comment_time'] +')</div>\n' +
+                                '<a href="javascript:reply('+ data['pk'] +')">回复</a>\n' + '</div>' + '</div>';
+                            $("#root_"+ data['root_pk']).append(reply_html);
+                        }
+
+
+                        // 清空编辑框的内容
+                        CKEDITOR.instances['id_text'].setData('');
+                        $('#modal_message_content').text('评论提交成功');
+                        $('#modal_message').modal('show');
+                    }else{
+                        $('#modal_message_content').text(data["error_message"]);
+                        $('#modal_message').modal('show');
+                    }
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+            }
+            return false;}
+        );
+
+        function reply(reply_comment_id) {
+            // 设置值
+            $('#reply_comment_id').val(reply_comment_id);
+            var html = $("#comment_" + reply_comment_id).html();
+            $('#reply_content').html(html);
+            $('#reply_content_container').show();
+            document.querySelector('#comment_form_title').scrollIntoView();
+            CKEDITOR.instances['id_text'].focus();
+        }
+    </script>
+{% endblock %}

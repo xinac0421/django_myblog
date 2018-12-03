@@ -1,0 +1,19 @@
+{% extends 'tools_base.html' %}
+{% load static %}
+
+{% block content %}
+    <form action="{% url 'tools_plugin:arithmetic_detail' %}" method="POST">
+
+        {% for math in math_form %}
+            <label for="{{ math.id_for_label }}">{{ math.label }}</label>
+            {{ math }}
+            <span class="error-message">{{ math.errors }}</span>
+        {% endfor %}
+        <br>
+        <span class="error-message">{{ math_form.non_field_errors }}</span>
+        <button type="submit" class="btn btn-default" value="Submit">生成习题</button>
+    </form>
+{% endblock %}
+
+
+

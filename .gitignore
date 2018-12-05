@@ -1,6 +1,7 @@
 *.log
 __pycache__/
 settings.py
+collected_static/
 migrations/*
 !migrations/__init__.py
 .DS_Store

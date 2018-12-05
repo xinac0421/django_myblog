@@ -127,3 +127,5 @@ def admin_test_page(request):
         'hot_article_for_7day': hot_article_for_7day
     }
     return render(request, 'gregblog/admin_test.html', context)
+
+

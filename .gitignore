@@ -1,6 +1,6 @@
 *.log
 __pycache__/
-settings.py
+settings_development.py
 collected_static/
 migrations/*
 !migrations/__init__.py

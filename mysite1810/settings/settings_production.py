@@ -75,7 +75,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/opt/logs/gregblog_debug.log',
-            'formatter': 'standard'
+            'formatter': 'verbose'
         },
         'default': {
             'level': 'DEBUG',
@@ -85,6 +85,8 @@ LOGGING = {
             'backupCount': 5,                         # 备份份数
             'formatter': 'standard',                   # 使用哪种formatters日志格式
         },
+        # 上面两种写入日志的方法是有区别的，前者是将控制台下输出的内容全部写入到文件中，这样做的好处就是我们在views代码中的所有print也会写在对应的位置
+        # 第二种方法就是将系统内定的内容写入到文件，具体就是请求的地址、错误信息等，小伙伴也可以都使用一下然后查看两个文件的异同。
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
@@ -99,11 +101,11 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.db.backends': {
             'handlers': ['file'],  # 指定file handler处理器，表示只写入到文件
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
 

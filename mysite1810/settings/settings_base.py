@@ -123,7 +123,27 @@ CKEDITOR_UPLOAD_PATH = 'ckeditor_upload/'  # 该编辑器的上传路径是相�
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 CKEDITOR_CONFIGS = {
-    'default': {},
+    'default': {
+        'width': 'auto',
+        'toolbar': (
+            ['div', 'Source', '-', 'Preview'],
+            ['Copy', 'Cut', 'Paste', 'PasteText', 'PasteFromWord',],
+            ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['TextColor', 'BGColor'],
+            ['Maximize', 'ShowBlocks', '-', 'About'],
+            ['CodeSnippet', '-', 'Print'],
+        ),
+
+        # 插件
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', ]),
+    },
+
     'comment_ckeditor': {
         'toolbar': 'Custom',
         'toolbar_Custom': [

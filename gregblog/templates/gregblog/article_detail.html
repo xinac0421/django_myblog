@@ -6,9 +6,12 @@
     {{ article_detail.title }}
 {% endblock %}
 
+{# 添加自定义的static文件 #}
 {% block head_static_expand %}
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    <script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'gregblog/prism.css' %}">
 {% endblock %}
 
 {% block content %}

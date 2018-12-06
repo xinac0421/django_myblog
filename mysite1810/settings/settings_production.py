@@ -62,10 +62,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {  # 格式器
         'verbose': {  # 详细
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
         },
         'standard': {  # 标准
-            'format': '[%(asctime)s] [%(levelname)s] %(message)s'
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
         },
     },
     'handlers': {

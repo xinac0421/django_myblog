@@ -60,11 +60,28 @@ ADMINS = [('admin', '30329128@163.com')]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {  # 格式器
+        'verbose': {  # 详细
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'standard': {  # 标准
+            'format': '[%(asctime)s] [%(levelname)s] %(message)s'
+        },
+    },
     'handlers': {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/opt/logs/gregblog_debug.log',
+            'formatter': 'standard'
+        },
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/opt/logs/gregblog_all.log',  # 日志输出文件
+            'maxBytes': 1024*1024*5,                  # 文件大小
+            'backupCount': 5,                         # 备份份数
+            'formatter': 'standard',                   # 使用哪种formatters日志格式
         },
         'mail_admins': {
             'level': 'ERROR',
@@ -78,9 +95,15 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
         },
+        'django.db.backends': {
+            'handlers': ['file'],  # 指定file handler处理器，表示只写入到文件
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
     },
 }

@@ -18,7 +18,6 @@ from django.urls import path
 from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.staticfiles.views import serve
 
 urlpatterns = [
     path('', include('gregblog.urls')),
@@ -27,7 +26,6 @@ urlpatterns = [
     path('tools/', include('tools_plugin.urls')),
     path('comment/', include('comment.urls')),
     path('', include('user.urls')),
-    path('favicon.ico', serve, {'path': 'favicon.ico'})
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

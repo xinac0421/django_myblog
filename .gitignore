@@ -4,6 +4,7 @@ settings_development.py
 collected_static/
 migrations/*
 !migrations/__init__.py
+media/
 .DS_Store
 .DS_Store?
 */.DS_Store

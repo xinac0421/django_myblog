@@ -28,6 +28,13 @@ class MathPlugin(forms.Form):
                                      'placeholder': '请输入生成的习题数量(比如100)',
                                  }
                                  ))
+    page_num = forms.IntegerField(min_value=1,
+                                  label="生成页数",
+                                  widget=forms.NumberInput(attrs={
+                                      'class': 'form-control',
+                                      'placeholder': '需要生成的页数(比如2页)',
+                                  }
+                                  ))
 
     def clean(self):
         lim_min = self.cleaned_data.get('lim_min')

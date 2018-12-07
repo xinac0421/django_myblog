@@ -8,3 +8,25 @@
     <link href="{% static "tools_plugin/math.css" %}" rel="stylesheet">
 {% endblock %}
 
+
+{% block content %}
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">工具列表</div>
+        <div class="list-group">
+            <a href="{% url "tools_plugin:arithmetic" %}" class="list-group-item">
+                <h4 class="list-group-item-heading">小学数学加减习题生成工具</h4>
+                <p class="list-group-item-text">
+                    1、可生成整数的加减法行列式，可自定义运算位数、生成数量以及生成的页数，方便打印<br>
+                    2、工具已自动分配20%的题目为变换式<br>
+                </p>
+                >>点击进入
+            </a>
+            <a href="#" class="list-group-item">其他工具制作中......</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

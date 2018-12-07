@@ -3,7 +3,7 @@
 
 {% block content %}
     <form action="{% url 'tools_plugin:arithmetic_detail' %}" method="POST">
-
+        {% csrf_token %}
         {% for math in math_form %}
             <label for="{{ math.id_for_label }}">{{ math.label }}</label>
             {{ math }}

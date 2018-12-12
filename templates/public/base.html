@@ -46,11 +46,31 @@
 
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="/">首页</a></li>
-                    <li><a href="{% url "gregblog:blog" %}">博客</a></li>
-                    <li><a href="{% url "gregblog:mood" %}">随笔</a></li>
-                    <li><a href="{% url "gregblog:admin_test" %}">报表</a></li>
-                    <li><a href="{% url "tools_plugin:index" %}">小工具</a></li>
+                    <li>
+                        <a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            首页
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "gregblog:blog" %}"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                            博客
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "gregblog:mood" %}"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                            随笔
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "gregblog:admin_test" %}"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                            报表
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "tools_plugin:index" %}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                            小工具
+                        </a>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

@@ -1,6 +1,7 @@
 import random
 import string
 import time
+import smtplib
 from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -134,6 +135,7 @@ def change_email(request):
     return render(request, 'public/form.html', context)
 
 
+# 邮箱认证
 def bind_email(request):
     redirect_to = request.GET.get('from', reverse('gregblog:index'))
     if request.method == 'POST':
@@ -161,6 +163,7 @@ def bind_email(request):
     return render(request, 'user/bind_email.html', context)
 
 
+# 发送验证码
 def send_verification_code(request):
     email = request.GET.get('email', '')
     send_for = request.GET.get('send_for', '')  # 验证码的类别区分：邮箱认证、密码找回等
@@ -183,23 +186,34 @@ def send_verification_code(request):
             }
             html_text = render_to_string('public/send_email.html', context)
 
-            # 发送邮件
-            send_mail(
-                '[王不迟的博客]邮箱认证',  # 邮件主题
-                '',     # 邮件纯文本内容
-                settings.EMAIL_HOST_USER,  # 发件人
-                [email],  # 收件人
-                fail_silently=False,
-                html_message=html_text  # 邮件html内容
-            )
-            data['status'] = 'SUCCESS'
-            data['message'] = '邮件发送成功，请及时查看您的邮箱'
+            try:
+                # 发送邮件
+                send_mail(
+                    '[王不迟的博客]邮箱认证',  # 邮件主题
+                    '',     # 邮件纯文本内容
+                    settings.EMAIL_HOST_USER,  # 发件人
+                    [email],  # 收件人
+                    fail_silently=False,
+                    html_message=html_text  # 邮件html内容
+                )
+                data['status'] = 'SUCCESS'
+                data['message'] = '邮件发送成功，请及时查看您的邮箱'
+            except smtplib.SMTPRecipientsRefused as e:
+                print('邮件发送失败，错误信息：', e)
+                data['status'] = 'ERROR'
+                data['message'] = '邮件发送失败，请检查您的邮箱地址或一会再试'
+            except smtplib.SMTPException as e:
+                print('邮件发送失败，错误信息：', e)
+                data['status'] = 'ERROR'
+                data['message'] = '邮件发送失败'
+
     else:
         data['status'] = 'ERROR'
         data['message'] = '验证码不能为空'
     return JsonResponse(data)
 
 
+# 修改密码
 def change_password(request):
     redirect_to = request.GET.get('from', reverse('gregblog:index'))
     if request.method == 'POST':
@@ -229,6 +243,7 @@ def change_password(request):
     return render(request, 'public/form.html', context)
 
 
+# 忘记密码
 def forgot_password(request):
     redirect_to = reverse('user:login')
     if request.method == 'POST':
@@ -250,7 +265,10 @@ def forgot_password(request):
             del request.session['forgot_password_code']
             return redirect(redirect_to)
     else:
-        forgot_password_form = ForgotPasswordForm()
+        if request.user.is_authenticated:  # 如果已经登录的时候返回到这个忘记密码界面，则直接跳转到上一页
+            return redirect(redirect_to)
+        else:
+            forgot_password_form = ForgotPasswordForm()
 
     context = dict()
     context['page_title'] = '密码找回'

@@ -285,7 +285,7 @@ class ForgotPasswordForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data.get('email', '').strip()
         if not User.objects.filter(email=email).exists():
-            raise forms.ValidationError('邮箱不存在')
+            raise forms.ValidationError('邮箱不存在，请检查后重试')
         return email  # 单独验证里不能返回self.cleaned_data,不然会把cleaned_data里的字典赋值给email返回
 
     def clean_verification_code(self):

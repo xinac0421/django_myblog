@@ -12,7 +12,7 @@ def tools_math_plugin(request):
     if request.method == 'POST':
         math_form = MathPlugin(request.POST)
         if math_form.is_valid():
-            columns_num = 5  # 分为5列
+            columns_num = 4  # 分为5列
             lim_min = math_form.cleaned_data['lim_min']
             lim_max = math_form.cleaned_data['lim_max']
             max_num = math_form.cleaned_data['max_num']

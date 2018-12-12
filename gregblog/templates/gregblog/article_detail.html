@@ -80,7 +80,7 @@
                 <button type="submit" class="btn btn-primary" style="float:right">评论</button>
             </form>
         {% else %}
-            <div><a class="btn btn-primary" href="{% url 'user:login' %}?from={{ request.get_full_path_info }}">登录</a> 后发表评论!</div>
+            <div><a class="btn btn-primary" href="{% url 'user:login' %}?from={{ request.get_full_path_info }}">登录</a> &nbsp; 为了防止垃圾评论，需要登录并且是认证通过的用户才能评论哦~</div>
         {% endif %}
     </div>
 

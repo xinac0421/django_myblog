@@ -7,3 +7,6 @@ ul.navbar-right {
     margin-right: 0;
 }
 
+span.error-message {
+    color: red;
+}

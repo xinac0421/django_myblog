@@ -5,7 +5,6 @@
 {# 加载自定义样式 #}
 {% block style %}
     <link href="{% static "base.css" %}" rel="stylesheet">
-    <link href="{% static "tools_plugin/math.css" %}" rel="stylesheet">
 {% endblock %}
 
 
@@ -19,6 +18,7 @@
                 <p class="list-group-item-text">
                     1、可生成整数的加减法行列式，可自定义运算位数、生成数量以及生成的页数，方便打印<br>
                     2、工具已自动分配20%的题目为变换式<br>
+                    3、因页面限制，当运算位数超过4位时(包括4位)，算式会换行显示
                 </p>
                 >>点击进入
             </a>

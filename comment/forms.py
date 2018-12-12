@@ -9,20 +9,24 @@ from .models import Comment
 class CommentForm(forms.Form):
     content_type = forms.CharField(widget=forms.HiddenInput)
     object_id = forms.IntegerField(widget=forms.HiddenInput)
-    text = forms.CharField(max_length=200, widget=CKEditorWidget(config_name='comment_ckeditor'), label=False,
-                           error_messages={
-                               'required': '评论内容不能为空',
-                               'max_length': '评论内容不能超过200个字符',
-                           }
-                           )
+    text = forms.CharField(
+        max_length=200,
+        widget=CKEditorWidget(config_name='comment_ckeditor'),
+
+        label=False,
+        error_messages={
+            'required': '评论内容不能为空',
+            'max_length': '评论内容不能超过200个字符',
+        }
+    )
     reply_comment_id = forms.IntegerField(widget=forms.HiddenInput(attrs={'id': 'reply_comment_id'}))
 
     def __init__(self, *args, **kwargs):
         # 获取views中实例化时传入的user参数，使用完需删除不影响父类
         if 'user' in kwargs:
             self.user = kwargs.pop('user')
-            print(self.user)
         super().__init__(*args, **kwargs)
+        super(CKEditorWidget)
 
     def clean(self):
         # 判断用户是否登录
@@ -30,6 +34,10 @@ class CommentForm(forms.Form):
             self.cleaned_data['user'] = self.user
         else:
             raise forms.ValidationError('您还未登录,登录后可评论')
+
+        # 判断用户是否认证
+        if not self.user.get_email_active():
+            raise forms.ValidationError('您还没有认证通过，请先去个人中心认证!')
 
         # 判断内容是否为空
         input_text = self.cleaned_data.get('text', '')
